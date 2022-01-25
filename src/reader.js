@@ -121,10 +121,10 @@ class MetadataReader {
     }
   }
 
-  get encryptionCerts() {
+  encryptionCerts(trimNewLines=true) {
     try {
       return this.query('//md:IDPSSODescriptor/md:KeyDescriptor[@use="encryption" or not(@use)]/sig:KeyInfo/sig:X509Data/sig:X509Certificate')
-        .map((node) => node.firstChild.data.replace(/[\r\n\t\s]/gm, ''));
+        .map((node) => trimNewLines === true ? node.firstChild.data.replace(/[\r\n\t\s]/gm, '') : node.firstChild.data);
     } catch (e) {
       if (this.options.throwExceptions) {
         throw e;
@@ -134,9 +134,9 @@ class MetadataReader {
     }
   }
 
-  get encryptionCert() {
+  encryptionCert(trimNewLines=true) {
     try {
-      return this.encryptionCerts[0].replace(/[\r\n\t\s]/gm, '');
+      return this.encryptionCerts(trimNewLines)[0].trim();
     } catch (e) {
       if (this.options.throwExceptions) {
         throw e;
@@ -146,10 +146,10 @@ class MetadataReader {
     }
   }
 
-  get signingCerts() {
+  signingCerts(trimNewLines=true) {
     try {
       return this.query('//md:IDPSSODescriptor/md:KeyDescriptor[@use="signing" or not(@use)]/sig:KeyInfo/sig:X509Data/sig:X509Certificate')
-        .map((node) => node.firstChild.data.replace(/[\r\n\t\s]/gm, ''));
+        .map((node) => trimNewLines === true ? node.firstChild.data.replace(/[\r\n\t\s]/gm, '') : node.firstChild.data);
     } catch (e) {
       if (this.options.throwExceptions) {
         throw e;
@@ -159,9 +159,9 @@ class MetadataReader {
     }
   }
 
-  get signingCert() {
+  signingCert(trimNewLines=true) {
     try {
-      return this.signingCerts[0].replace(/[\r\n\t\s]/gm, '');
+      return this.signingCerts(trimNewLines)[0].trim();
     } catch (e) {
       if (this.options.throwExceptions) {
         throw e;
